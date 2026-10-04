@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ags-scraper"
+version = "0.1.0"
+description = "CLI y librería para consultar datos públicos del Gobierno del Estado de Aguascalientes"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Carlos Cervantes Bedoy" }]
+requires-python = ">=3.9"
+keywords = ["aguascalientes", "periodico-oficial", "scraper", "datos-abiertos"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+poe = "ags_scraper.cli:main"
+
+[tool.setuptools]
+packages = ["ags_scraper"]
