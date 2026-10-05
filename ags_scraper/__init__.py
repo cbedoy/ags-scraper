@@ -8,6 +8,7 @@ from .periodico import (
     TIPOS_PUBLICACION,
     PeriodicoOficialClient,
 )
+from .vicia import MUNICIPIOS, ViceaClient
 
 __all__ = [
     "BASE_URL",
@@ -15,7 +16,9 @@ __all__ = [
     "ORDENES_GOB",
     "SECCIONES",
     "TIPOS_PUBLICACION",
+    "MUNICIPIOS",
     "PeriodicoOficialClient",
+    "ViceaClient",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

@@ -24,7 +24,7 @@ por fuente de datos pública del estado.
 | Script | Fuente | Estado |
 | ------ | ------ | ------ |
 | `poe.py` | Periódico Oficial del Estado de Aguascalientes | ✅ funcional |
-| *(visor catastral / VICEA)* | Instituto Registral y Catastral | 🔜 planeado |
+| `vicia.py` | Catastro (visor VICEA / Instituto Registral y Catastral) | ✅ funcional |
 | *(normateca)* | Normateca estatal | 🔜 planeado |
 
 ## `poe.py` — Periódico Oficial
@@ -95,6 +95,42 @@ for r in resultados:
     print(r["IdPeriodico"], r["FechaPublicacion"], PeriodicoOficialClient.url_pdf(r["IdPeriodico"]))
 ```
 
+## `vicia.py` — Catastro (visor VICEA)
+
+Consulta por **dirección** los servicios ArcGIS REST que usa el visor catastral
+VICEA (`http://visorcartografico.aguascalientes.gob.mx:6080`), sin abrir el mapa.
+
+> ⚠️ Uso no oficial, solo consulta. Datos del Instituto Registral y Catastral.
+
+```bash
+# Buscar por calle y número
+python vicia.py direccion -c "convencion de 1914 sur" -n 102
+
+# Acotar por colonia y municipio
+python vicia.py direccion -c "convencion" -n 102 -a "del trabajo" -m aguascalientes
+
+# Buscar colonias y calles (para descubrir nombres exactos)
+python vicia.py asentamientos -q "centro"
+python vicia.py vialidades -q "convencion" -a 00017
+
+# Salida JSON (incluye atributos completos)
+python vicia.py direccion -c "convencion" -n 102 -a "del trabajo" --json
+```
+
+### Qué devuelve
+
+Por cada domicilio: calle, número, colonia, manzana, lote, coordenadas
+(lat/lon con enlace a Google Maps) y los **predios** que intersectan esa
+dirección, con su **clave catastral** (`CVE_CAT_EST`), clave original, área en
+m² y régimen.
+
+### Municipios
+
+`-m` acepta id o nombre: `1` aguascalientes, `2` asientos, `3` calvillo,
+`4` cosio, `5` jesus maria, `6` pabellon de arteaga, `7` rincon de romos,
+`8` san jose de gracia, `9` tepezala, `10` el llano, `11` san francisco de los
+romo.
+
 ## Notas técnicas
 
 - El buscador expone un endpoint JSON (`Default.aspx/obtenerInformacion`) que
@@ -104,11 +140,15 @@ for r in resultados:
   búsqueda por contenido falla, reintenta o usa `--titulo`.
 - El servidor usa HSTS/TLS válido; el flag `--insecure` solo debe usarse para
   depuración.
+- El visor VICEA solo funciona sobre **HTTP** (puerto 6080); su `https://`
+  está caído por configuración TLS. Este script usa los servicios ArcGIS REST
+  directamente, sin pasar por el mapa (que es lento y solo funciona en Safari).
 
 ## Uso con un agente / skill
 
-Se incluye un skill en `skills/periodico-oficial/SKILL.md` que documenta cómo un
-agente puede usar este script. Cópialo a tu directorio de skills para registrarlo.
+Se incluyen skills en `skills/` (`periodico-oficial` y `vicia-catastro`) que
+documentan cómo un agente puede usar estos scripts. Cópialos a tu directorio de
+skills para registrarlos.
 
 ## Contribuir
 
